@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import { User_Model } from '../models/user.js'
 import jwt from "jsonwebtoken"
+import { sendCookies } from "../utils/features.js"
 
 
 export const all_GET = async (req, res) => {
@@ -19,17 +20,10 @@ export const register = async (req, res) => {
 
             })
         }
-        const hashPassword = await bcrypt.hash(password, 10)
-        const token = jwt.sign({ _id: User_Model._id }, process.env.JWT_SECRET)
 
+        const hashPassword = await bcrypt.hash(password, 10)
         user = await User_Model.create({ name: name, email: email, password: hashPassword })
-        res.status(201).cookie("token", token, {
-            httpOnly: true,
-            maxAge: 15 * 60 * 1000
-        }).json({
-            success: true,
-            message: "Registered Successfully"
-        })
+        sendCookies(User_Model,res,)
     } catch (error) {
         console.error(error)
         res.status(500).json({
