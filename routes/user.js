@@ -1,14 +1,12 @@
 import express from 'express'
-import { all_GET, all_id_id_GET, login, register } from '../controllers/user.js'
+import { all_GET, profile, login, register } from '../controllers/user.js'
 
 const router = express.Router()
 
 router.get('/all', all_GET)
 router.post('/register', register)
 router.post('/login',login)
-
-
-router.route('/id/:id').get(all_id_id_GET)
+router.get("/myprofile",profile)
 
 
 export default router
