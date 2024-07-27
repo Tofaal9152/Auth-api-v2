@@ -5,7 +5,6 @@ import taskRoute from "./routes/task.js";
 import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
 import { errormiddleware } from './middlewares/error.js';
-import { isAuthenticated } from './middlewares/auth.js';
 import cors from 'cors'
 config({
     path: "./.env"
