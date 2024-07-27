@@ -1,26 +1,27 @@
 import mongoose from "mongoose";
 
-const User_Schema = new mongoose.Schema({
+const Schema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
         required: true,
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true
+    },
     isCompleted: {
-        type: bool,
+        type: Boolean,
         default: false,
 
-    },
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"user"
     },
     createdAt: {
         type: Date,
         default: Date.now
     }
 })
-export const User_Model = mongoose.model('User_Info', User_Schema);
+export const Task_Model = mongoose.model('Task_Info', Schema);

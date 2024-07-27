@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt"
 import { User_Model } from '../models/user.js'
-import jwt from "jsonwebtoken"
 import { sendCookies, sendRequest } from "../utils/features.js"
 
 
@@ -30,36 +29,30 @@ export const login = async (req, res) => {
         const { email, password } = req.body
         const user = await User_Model.findOne({ email }).select("+password")
         if (!user) {
-            return sendRequest(res,true, 409, "Invalid Email Or Password")
+            return sendRequest(res, false, 409, "Invalid Email Or Password")
         }
         const isMatched = await bcrypt.compare(password, user.password)
         if (!isMatched) {
-            return sendRequest(res,true, 409, "Invalid Email Or Password")
+            return sendRequest(res, false, 409, "Invalid Email Or Password")
         }
         sendCookies(user, res, 201, "Welcome Back")
     } catch (error) {
         sendRequest(res, false, 500, "Internal Server Error login")
     }
 }
+export const logout = (req, res) => {
+    res.status(200).cookie("token", "", { expires: new Date(0) }).json({
+        success: true,
+        message: "Log out succesfull"
+    })
+}
 export const profile = async (req, res) => {
     try {
-        const {token} = req.cookies
-        if (!token) {
-            sendRequest(res,false,404,"Not logged in")
+        if (!req.user) {
+            return sendRequest(res, false, 500, "user not found")
         }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decoded);
-        console.log(token);
-        const user = await User_Model.findById(decoded._id)
-        console.log(user);
-        if (!user) {
-            return sendRequest(res,false,500,"user not found")
-        }
-        res.status(201).json({
-            success:true,
-            user
-        })
+        sendRequest(res, true, 201,req.user)
     } catch (error) {
-        sendRequest(res,false, 500, "Internal Server Error Profile")
+        sendRequest(res, false, 500, "Internal Server Error Profile")
     }
 }
