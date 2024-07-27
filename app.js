@@ -1,5 +1,6 @@
 import express from 'express'
 // 
+import { all_GET } from './controllers/user.js';
 import userRoute from "./routes/user.js";
 import taskRoute from "./routes/task.js";
 import cookieParser from 'cookie-parser';
@@ -20,6 +21,7 @@ app.use(cors({
 }))
 
 // Routers
+app.use("/",all_GET)
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/task", taskRoute)
 // error handelling
