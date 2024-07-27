@@ -40,11 +40,15 @@ export const login = async (req, res, next) => {
     }
 }
 export const logout = (req, res, next) => {
-    res.status(200).cookie("token", "", { expires: new Date(0) }).json({
+    res.status(200).cookie("token", "", {
+        expires: new Date(0),
+        sameSite: process.env.NODE_ENV === "developement" ? "lax" : "none",
+        secure: process.env.NODE_ENV === "developement" ? false : true,
+    }).json({
         success: true,
         message: "Log out succesfull"
     })
-}
+} 
 export const profile = async (req, res, next) => {
     try {
         if (!req.user) return next(new ErrorHandlers("user not found", 404))
