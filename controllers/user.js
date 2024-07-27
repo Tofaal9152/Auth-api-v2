@@ -5,6 +5,9 @@ import ErrorHandlers from "../middlewares/error.js"
 
 
 export const all_GET = async (req, res, next) => {
+    res.json({
+        message:"nice Working"
+    })
 
 }
 export const register = async (req, res, next) => {
